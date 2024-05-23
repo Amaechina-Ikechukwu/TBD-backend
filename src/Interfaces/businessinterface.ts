@@ -1,11 +1,11 @@
 export interface BusinessInterface {
-  name: string;
-  description: string | null;
-  bank_name: string;
-  bank_account_number: string;
-  bank_account_name: string;
-  facebook_link: string | null;
-  instagram_link: string | null;
-  twitter_link: string | null;
-  phone_number: string;
+  business_name: string;
+  business_description: string | null;
+  business_bank_name: string;
+  business_bank_account_number: string;
+  business_bank_account_name: string;
+  business_facebook_link: string | null;
+  business_instagram_link: string | null;
+  business_twitter_link: string | null;
+  business_phone_number: string;
 }
