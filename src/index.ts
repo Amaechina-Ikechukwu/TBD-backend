@@ -4,7 +4,7 @@ import * as path from "path";
 import "dotenv/config";
 import CalendarRouter from "./Routes/calendar";
 import PagesRouter from "./Routes/pages";
-import serviceAccount from "./Config/tbd.json";
+import serviceAccount from "../tbd.json";
 import bodyParser from "body-parser";
 import { getFirestore } from "firebase-admin/firestore";
 
