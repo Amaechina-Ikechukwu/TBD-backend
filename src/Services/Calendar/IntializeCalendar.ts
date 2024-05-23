@@ -6,7 +6,8 @@ import path from "path";
 
 class CalendarInitialization {
   private readonly SCOPES = [
-    "https://www.googleapis.com/auth/calendar.readonly",
+    "https://www.googleapis.com/auth/calendar",
+    "https://www.googleapis.com/auth/calendar.events",
   ];
   private readonly TOKEN_PATH = path.join(process.cwd(), "token.json");
   private readonly CREDENTIALS_PATH = path.join(process.cwd(), "tbd-cred.json");
@@ -47,27 +48,35 @@ class CalendarInitialization {
     return client;
   }
   async listEvents(auth: any) {
+    const eventsArray: any = [];
+
     const calendar = google.calendar({ version: "v3", auth });
     const res = await calendar.events.list({
-      calendarId: "primary",
+      calendarId: "amaechinaikechukwu6@gmail.com",
       timeMin: new Date().toISOString(),
       maxResults: 10,
       singleEvents: true,
       orderBy: "startTime",
     });
+
     const events = res.data.items;
     if (!events || events.length === 0) {
-      console.log("No upcoming events found.");
-      return;
+      return eventsArray;
     }
-    console.log("Upcoming 10 events:");
+
     events.map((event, i) => {
-      const start = event.start.dateTime || event.start.date;
-      console.log(`${start} - ${event.summary}`);
+      // const start = event.start.dateTime || event.start.date;
+      // const end = event.end.dateTime || event.end.date;
+      // const eventId = event.id;
+
+      eventsArray.push({ ...event });
     });
+    return eventsArray;
   }
   async initialize() {
-    this.authorize().then(this.listEvents).catch(console.error);
+    return this.authorize()
+      .then((auth) => this.listEvents(auth))
+      .catch(console.error);
   }
 }
 export default CalendarInitialization;
