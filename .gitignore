@@ -1,7 +1,6 @@
 tbd-cred.json
 tbd.json
 .env
-lib
 node_modules
 dist
 logs

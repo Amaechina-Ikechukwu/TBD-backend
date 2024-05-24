@@ -19,10 +19,10 @@ export const decodeReversedJwt = (
   try {
     const reversedToken = token.split("").reverse().join(""); // Reverse the token back
     const decoded = jwt.verify(reversedToken, SECRET_KEY) as {
-      user_id: string;
+      uid: string;
     };
 
-    req.user_id = decoded.user_id; // Assuming you extend the Request interface to include user_id
+    req.user_id = decoded.uid; // Assuming you extend the Request interface to include user_id
     next();
   } catch (error) {
     res.status(401).json({ message: "Unauthorized" });

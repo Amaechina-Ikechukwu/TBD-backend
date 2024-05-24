@@ -7,6 +7,7 @@ import PagesRouter from "./Routes/pages";
 import serviceAccount from "../tbd.json";
 import bodyParser from "body-parser";
 import { getFirestore } from "firebase-admin/firestore";
+import BusinessRouter from "./Routes/business";
 
 class TBDApp {
   private readonly app: Express;
@@ -41,8 +42,9 @@ class TBDApp {
 
   private configureRoutes(): void {
     this.app.use(bodyParser.json());
-    this.app.use("/", new PagesRouter().getRouter());
+    this.app.use("/web", new PagesRouter().getRouter());
     this.app.use("/calendar", new CalendarRouter().getRouter());
+    this.app.use("/business", new BusinessRouter().getRouter());
     // Add any additional routers here
   }
 

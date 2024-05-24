@@ -32,6 +32,7 @@
             .signInWithPopup(provider)
             .then((result) => {
               var user = result.user;
+              console.log(JSON.stringify(user, null, 2));
               document.getElementById("user-details").innerHTML = `
             <p>Name: ${user.displayName}</p>
             <p>Email: ${user.email}</p>
