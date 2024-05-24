@@ -23,6 +23,11 @@ class BusinessRouter {
       checkParametersMiddleware(["business_name"]),
       this.checkIfBusinessNameExist.bind(this)
     );
+    this.router.get(
+      "/profile",
+      checkParametersMiddleware(["business_uid"]),
+      this.getBusinessInformation.bind(this)
+    );
     this.router.post(
       "/profile",
       checkParametersMiddleware([
@@ -47,6 +52,17 @@ class BusinessRouter {
       this.createBusiness.bind(this)
     );
     this.router.use(this.errorHandler.bind(this));
+  }
+  private async getBusinessInformation(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      await this.business.businessProfile(req, res);
+    } catch (error) {
+      next(error);
+    }
   }
   private async checkIfBusinessNameExist(
     req: Request,

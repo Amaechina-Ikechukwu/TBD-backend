@@ -3,6 +3,7 @@ import process from "process";
 import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
 import path from "path";
+import { ListOfEventDTO } from "../../Utils/DTOS/ListOfEventsDTO";
 
 class CalendarInitialization {
   private readonly SCOPES = [
@@ -47,12 +48,12 @@ class CalendarInitialization {
     }
     return client;
   }
-  async listEvents(auth: any) {
+  async listEvents(auth: any, business_email: string) {
     const eventsArray: any = [];
 
     const calendar = google.calendar({ version: "v3", auth });
     const res = await calendar.events.list({
-      calendarId: "amaechinaikechukwu6@gmail.com",
+      calendarId: business_email,
       timeMin: new Date().toISOString(),
       maxResults: 10,
       singleEvents: true,
@@ -64,18 +65,14 @@ class CalendarInitialization {
       return eventsArray;
     }
 
-    events.map((event, i) => {
-      // const start = event.start.dateTime || event.start.date;
-      // const end = event.end.dateTime || event.end.date;
-      // const eventId = event.id;
-
-      eventsArray.push({ ...event });
+    events.map((event: any, i) => {
+      eventsArray.push({ ...ListOfEventDTO(event) });
     });
     return eventsArray;
   }
-  async initialize() {
+  async initialize(business_email: string) {
     return this.authorize()
-      .then((auth) => this.listEvents(auth))
+      .then((auth) => this.listEvents(auth, business_email))
       .catch(console.error);
   }
 }

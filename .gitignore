@@ -5,3 +5,5 @@ node_modules
 dist
 logs
 token.json
+yarn.lock
+lib

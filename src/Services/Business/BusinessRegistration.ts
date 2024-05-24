@@ -1,5 +1,6 @@
-import { getFirestore } from "firebase-admin/firestore";
+import { QueryDocumentSnapshot, getFirestore } from "firebase-admin/firestore";
 import { CreateBusinessInterface } from "../../Interfaces/businessinterface";
+import BusinessInformationBreakDown from "../../Utils/DTOS/BusinessDTO";
 
 class BusinessInitialization {
   private readonly database;
@@ -7,6 +8,43 @@ class BusinessInitialization {
   constructor() {
     this.database = getFirestore();
     this.businessRef = this.database.collection("businesses");
+  }
+  async getBusinessProfile(
+    business_uid: string
+  ): Promise<CreateBusinessInterface | null> {
+    try {
+      const queryBusinessName = await this.businessRef
+        .where("uid", "==", business_uid)
+        .get();
+      if (queryBusinessName.empty) {
+        return null;
+      }
+      let businessProfile: CreateBusinessInterface;
+      queryBusinessName.forEach((doc: any) => {
+        businessProfile = doc.data();
+      });
+
+      return BusinessInformationBreakDown(businessProfile);
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+  async getBusinessID(business_uid: string): Promise<string | null> {
+    try {
+      const queryBusinessName = await this.businessRef
+        .where("uid", "==", business_uid)
+        .get();
+      if (queryBusinessName.empty) {
+        return null;
+      }
+      let uid;
+      queryBusinessName.forEach((doc: QueryDocumentSnapshot) => {
+        uid = doc.id;
+      });
+      return uid;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
   async doesBusinessExist(business_name: string): Promise<boolean | void> {
     try {
@@ -21,10 +59,7 @@ class BusinessInitialization {
       throw new Error(error);
     }
   }
-  async registerBusiness(
-    business: CreateBusinessInterface,
-    user_id: string
-  ): Promise<string> {
+  async registerBusiness(business: CreateBusinessInterface): Promise<string> {
     try {
       const businessExist = await this.doesBusinessExist(
         business.business_name
@@ -33,7 +68,7 @@ class BusinessInitialization {
         return "Business name already exist";
       }
 
-      await this.businessRef.doc(user_id).set({
+      await this.businessRef.doc().set({
         ...business,
       });
       return "Business added";

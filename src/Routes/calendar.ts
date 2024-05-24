@@ -20,7 +20,11 @@ class CalendarRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.get("/events", this.getEvents.bind(this));
+    this.router.get(
+      "/events",
+      checkParametersMiddleware(["business_id"]),
+      this.getEvents.bind(this)
+    );
     this.router.post(
       "/events",
       checkParametersMiddleware([
