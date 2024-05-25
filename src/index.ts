@@ -8,6 +8,7 @@ import serviceAccount from "../tbd.json";
 import bodyParser from "body-parser";
 import { getFirestore } from "firebase-admin/firestore";
 import BusinessRouter from "./Routes/business";
+import cors from "cors"; // Import cors
 
 class TBDApp {
   private readonly app: Express;
@@ -36,6 +37,7 @@ class TBDApp {
     this.app.use(bodyParser.json());
   }
   private configureMiddlewares(): void {
+    this.app.use(cors());
     this.app.use(express.static(path.join(__dirname, "Public")));
     // Add any additional middlewares here
   }

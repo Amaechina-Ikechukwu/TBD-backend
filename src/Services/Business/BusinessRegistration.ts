@@ -1,5 +1,8 @@
 import { QueryDocumentSnapshot, getFirestore } from "firebase-admin/firestore";
-import { CreateBusinessInterface } from "../../Interfaces/businessinterface";
+import {
+  BusinessInterface,
+  CreateBusinessInterface,
+} from "../../Interfaces/businessinterface";
 import BusinessInformationBreakDown from "../../Utils/DTOS/BusinessDTO";
 
 class BusinessInitialization {
@@ -46,6 +49,21 @@ class BusinessInitialization {
       throw new Error(error);
     }
   }
+  async doesBusinessIDExist(business_id: string): Promise<string | void> {
+    try {
+      const queryBusinessName = await this.businessRef
+        .where("uid", "==", business_id)
+        .get();
+      if (queryBusinessName.empty) {
+        return;
+      }
+      let doc_id;
+      queryBusinessName.forEach((doc) => (doc_id = doc.id));
+      return doc_id;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
   async doesBusinessExist(business_name: string): Promise<boolean | void> {
     try {
       const queryBusinessName = await this.businessRef
@@ -59,15 +77,39 @@ class BusinessInitialization {
       throw new Error(error);
     }
   }
+  async updateBusinessProfile(
+    business: BusinessInterface,
+    business_id: any
+  ): Promise<string> {
+    try {
+      const businessID = await this.doesBusinessIDExist(business_id);
+
+      if (businessID) {
+        await this.businessRef.doc(businessID).update({
+          ...business,
+        });
+        return "Business profile updated";
+      }
+      return "Business does not exist";
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
   async registerBusiness(business: CreateBusinessInterface): Promise<string> {
     try {
       const businessExist = await this.doesBusinessExist(
         business.business_name
       );
+      const businessID = await this.doesBusinessIDExist(business.uid);
       if (businessExist) {
         return "Business name already exist";
       }
-
+      if (businessID) {
+        await this.businessRef.doc(businessID).update({
+          ...business,
+        });
+        return "Business profile updated";
+      }
       await this.businessRef.doc().set({
         ...business,
       });

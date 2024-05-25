@@ -48,6 +48,27 @@ class BusinessIndex {
     }
   }
 
+  async updateBusiness(req: any, res: Response) {
+    try {
+      const data = req.body;
+      const result = await this.businessMethods.updateBusinessProfile(
+        data,
+        req.user_id
+      );
+      if (result == "Business does not exist") {
+        res.status(403).json({
+          result,
+        });
+        return;
+      }
+      res.status(200).json({
+        result,
+      });
+    } catch (error: any) {
+      logger.error("From create business controller", error);
+      throw new Error(error);
+    }
+  }
   async createBusiness(req: Request, res: Response) {
     try {
       const data = req.body;

@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 const SECRET_KEY = process.env.TBD_KEY;
 
 export const decodeReversedJwt = (
-  req: Request,
+  req: any,
   res: Response,
   next: NextFunction
 ): void => {

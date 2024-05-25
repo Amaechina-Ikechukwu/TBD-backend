@@ -8,6 +8,7 @@ import {
 import BusinessIndex from "../Controllers/Business";
 import logger from "../Utils/Logger";
 import checkParametersMiddleware from "../Middlewares/checkParametersMiddleware";
+import { decodeReversedJwt } from "../Middlewares/decrypttoken";
 
 class BusinessRouter {
   private readonly router: Router;
@@ -51,6 +52,11 @@ class BusinessRouter {
       ]),
       this.createBusiness.bind(this)
     );
+    this.router.put(
+      "/profile",
+      decodeReversedJwt,
+      this.updateBusiness.bind(this)
+    );
     this.router.use(this.errorHandler.bind(this));
   }
   private async getBusinessInformation(
@@ -82,6 +88,17 @@ class BusinessRouter {
   ): Promise<void> {
     try {
       await this.business.createBusiness(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
+  private async updateBusiness(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      await this.business.updateBusiness(req, res);
     } catch (error) {
       next(error);
     }

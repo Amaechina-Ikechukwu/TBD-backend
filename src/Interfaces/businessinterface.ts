@@ -8,6 +8,7 @@ export interface BusinessInterface {
   business_instagram_link: string | null;
   business_twitter_link: string | null;
   business_phone_number: string;
+  business_logo: string;
 }
 export interface ProviderData {
   uid: string;
@@ -39,6 +40,7 @@ export interface CreateBusinessInterface {
   business_instagram_link: string | null;
   business_twitter_link: string | null;
   business_phone_number: string;
+  business_logo: string;
   uid: string;
   displayName: string;
   photoURL: string;
