@@ -38,9 +38,10 @@ class TBDApp {
   }
   private configureMiddlewares(): void {
     const corsOptions = {
-      origin: "http://localhost:3000", // Allow only example.com
-      methods: ["GET", "POST", "PUT"], // Allow only GET and POST requests
-      allowedHeaders: ["Content-Type"], // Allow specific headers
+      origin: ["http://localhost:3000", "https://tbd-backend.onrender.com"], // Allow only example.com
+      methods: ["GET", "POST", "PUT", "DELETE"], // Allow only GET and POST requests
+      // allowedHeaders: ["Content-Type"], // Allow specific headers
+      credential: true
     };
 
     this.app.use(cors(corsOptions));
