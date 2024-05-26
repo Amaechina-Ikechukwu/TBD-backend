@@ -37,7 +37,13 @@ class TBDApp {
     this.app.use(bodyParser.json());
   }
   private configureMiddlewares(): void {
-    this.app.use(cors());
+    const corsOptions = {
+      origin: "http://localhost:3000", // Allow only example.com
+      methods: ["GET", "POST", "PUT"], // Allow only GET and POST requests
+      allowedHeaders: ["Content-Type"], // Allow specific headers
+    };
+
+    this.app.use(cors(corsOptions));
     this.app.use(express.static(path.join(__dirname, "Public")));
     // Add any additional middlewares here
   }
