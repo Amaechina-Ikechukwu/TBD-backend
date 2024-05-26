@@ -41,7 +41,7 @@ class TBDApp {
       origin: ["http://localhost:3000", "https://tbd-backend.onrender.com"], // Allow only example.com
       methods: ["GET", "POST", "PUT", "DELETE"], // Allow only GET and POST requests
       // allowedHeaders: ["Content-Type"], // Allow specific headers
-      credential: true
+      credentials: true
     };
 
     this.app.use(cors(corsOptions));
