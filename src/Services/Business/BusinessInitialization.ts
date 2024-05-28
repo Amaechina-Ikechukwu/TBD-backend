@@ -4,6 +4,7 @@ import {
   CreateBusinessInterface,
 } from "../../Interfaces/businessinterface";
 import BusinessInformationBreakDown from "../../Utils/DTOS/BusinessDTO";
+import { generateToken } from "../../Config/createtoken";
 
 class BusinessInitialization {
   private readonly database;
@@ -105,15 +106,13 @@ class BusinessInitialization {
         return "Business name already exist";
       }
       if (businessID) {
-        await this.businessRef.doc(businessID).update({
-          ...business,
-        });
-        return "Business profile updated";
+        return "Business Id already exists";
       }
       await this.businessRef.doc().set({
         ...business,
       });
-      return "Business added";
+      const token = generateToken(business);
+      return token;
     } catch (error: any) {
       throw new Error(error);
     }

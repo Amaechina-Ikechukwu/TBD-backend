@@ -57,6 +57,25 @@ class BusinessRouter {
       decodeReversedJwt,
       this.updateBusiness.bind(this)
     );
+    this.router.get(
+      "/stillvalid",
+      decodeReversedJwt,
+      this.IsStillValid.bind(this)
+    );
+    this.router.post(
+      "/token",
+      checkParametersMiddleware([
+        "uid",
+        "displayName",
+        "email",
+        "emailVerified",
+        "isAnonymous",
+        "phoneNumber",
+        "photoURL",
+        "tenantId",
+      ]),
+      this.getToken.bind(this)
+    );
     this.router.use(this.errorHandler.bind(this));
   }
   private async getBusinessInformation(
@@ -88,6 +107,29 @@ class BusinessRouter {
   ): Promise<void> {
     try {
       await this.business.createBusiness(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  private async IsStillValid(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      res.status(200).json({ result: true });
+    } catch (error) {
+      next(error);
+    }
+  }
+  private async getToken(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      await this.business.createToken(req, res);
     } catch (error) {
       next(error);
     }

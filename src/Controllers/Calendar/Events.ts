@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import CalendarInitialization from "../../Services/Calendar/IntializeCalendar";
 import logger from "../../Utils/Logger";
 import EventCreation from "../../Services/Calendar/EventCreation";
-import BusinessInitialization from "../../Services/Business/BusinessRegistration";
+import BusinessInitialization from "../../Services/Business/BusinessInitialization";
 class Events {
   async events(req: Request, res: Response) {
     try {

@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import { CreateEvent } from "../../Interfaces/calendarInterfaces";
 import CalendarInitialization from "./IntializeCalendar";
 import logger from "../../Utils/Logger";
-import BusinessInitialization from "../Business/BusinessRegistration";
+import BusinessInitialization from "../Business/BusinessInitialization";
 
 class EventCreation {
   async createEvent(data: CreateEvent, business_id: string) {

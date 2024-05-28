@@ -55,7 +55,7 @@ class CalendarInitialization {
     const res = await calendar.events.list({
       calendarId: business_email,
       timeMin: new Date().toISOString(),
-      maxResults: 10,
+      maxResults: 2500,
       singleEvents: true,
       orderBy: "startTime",
     });

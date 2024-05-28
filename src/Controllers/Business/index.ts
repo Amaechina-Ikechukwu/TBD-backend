@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import BusinessInitialization from "../../Services/Business/BusinessRegistration";
+import BusinessInitialization from "../../Services/Business/BusinessInitialization";
 import logger from "../../Utils/Logger";
+import { generateToken } from "../../Config/createtoken";
+import { getAuth } from "firebase-admin/auth";
 
 class BusinessIndex {
   private readonly businessMethods;
@@ -20,6 +22,35 @@ class BusinessIndex {
     } catch (error: any) {
       logger.error("From create business controller", error);
       throw new Error(error);
+    }
+  }
+
+  public async createToken(req: Request, res: Response): Promise<void> {
+    try {
+      const userRecord = await getAuth().getUser(req.body.uid);
+
+      if (!userRecord) {
+        res.status(403).json({
+          result: "Not valid user credentials",
+        });
+      }
+
+      const token = generateToken(req.body);
+      res.status(200).json({
+        result: token,
+      });
+    } catch (error: any) {
+      if (error.code === "auth/user-not-found") {
+        res.status(403).json({
+          result: "Not valid user credentials",
+        });
+      } else {
+        logger.error("From create business controller", error.message);
+        res.status(500).json({
+          error: "An error occurred while creating the token",
+          details: error.message,
+        });
+      }
     }
   }
 
@@ -73,7 +104,10 @@ class BusinessIndex {
     try {
       const data = req.body;
       const result = await this.businessMethods.registerBusiness(data);
-      if (result == "Business name already exist") {
+      if (
+        result == "Business name already exist" ||
+        result == "Business Id already exists"
+      ) {
         res.status(403).json({
           result,
         });
