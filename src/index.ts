@@ -38,7 +38,7 @@ class TBDApp {
   }
   private configureMiddlewares(): void {
     const corsOptions = {
-      origin: ["http://localhost:3000", "https://tbd-backend.onrender.com"], // Allow only example.com
+      origin: ["https://tbd-scheduling.vercel.app", "https://tbd-backend.onrender.com"], // Allow only example.com
       methods: ["GET", "POST", "PUT", "DELETE"], // Allow only GET and POST requests
       // allowedHeaders: ["Content-Type"], // Allow specific headers
       credentials: true
